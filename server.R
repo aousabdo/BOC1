@@ -16,7 +16,8 @@ shinyServer(function(input, output){
   # Reactive data frame to store data
   data <- reactive({
     proportions <- seq(0.001, 0.2, 0.001)
-    
+    Tolerance   <- 1e-3
+    Threshold   <- 0.0
     ## Read input from ui.R file
     nfails      <- c(input$fails1)
     nshots      <- c(input$shots1)
@@ -44,13 +45,13 @@ shinyServer(function(input, output){
     }
     else{
       PropMin <- 0
-      PropMax <- MaxX(nfails[1], nshots[1], max=0.001)
+      PropMax <- MaxX(nfails[1], nshots[1], max=0.001, tolerance=Tolerance, Threshold=Threshold)
       if(addtest2){
-        PropMax  <- max(PropMax, MaxX(nfails[2], nshots[2], max=0.001))
+        PropMax  <- max(PropMax, MaxX(nfails[2], nshots[2], max=0.001, tolerance=Tolerance, Threshold=Threshold))
         if(addtest3){
-          PropMax  <- max(PropMax, MaxX(nfails[3], nshots[3], max=0.001))
+          PropMax  <- max(PropMax, MaxX(nfails[3], nshots[3], max=0.001, tolerance=Tolerance, Threshold=Threshold))
           if(addtest4){
-            PropMax  <- max(PropMax, MaxX(nfails[4], nshots[4], max=0.001))
+            PropMax  <- max(PropMax, MaxX(nfails[4], nshots[4], max=0.001, tolerance=Tolerance, Threshold=Threshold))
           }
         }
       }
@@ -62,7 +63,7 @@ shinyServer(function(input, output){
     for (i in 1:length(nfails)){
       probs[[i]] <- pbinom(nfails[i], nshots[i], proportions)
     }
-    
+        
     df <- data.frame(Proportions = proportions, Prob1 = probs[[1]])
     if(addtest2){
       df$Prob2 <- probs[[2]]
@@ -169,7 +170,10 @@ shinyServer(function(input, output){
     legend_lty        <- c(1)
     legend_colors     <- c("blue")
     
+    nCol <- 1
+    
     if(input$addtest2){
+      nCol <- 2
       leg2 <- sprintf("%s: %.0f failures, %.0f shots", test2name, input$fails2, input$shots2)
       legend_entries[2] <- leg2
       legend_colors[2]  <- "red"
@@ -193,7 +197,7 @@ shinyServer(function(input, output){
     plot.new()
     legend( "center", legend = legend_entries, 
             lty=legend_lty, lwd=rep(linewidth, length(legend_lty)), 
-            col=legend_colors, ncol=2, bty="y", cex=legtext
+            col=legend_colors, ncol=nCol, bty="y", cex=legtext
     )
   }
   ############## End of plot making funciton #########################
