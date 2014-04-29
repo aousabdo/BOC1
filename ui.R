@@ -1,3 +1,8 @@
+## Binomail Operating Characterstic Curves app
+## Author: Dr. Aous Abdo <aabdo.und@ida.org>
+## Company: Institute for Defense Analyses
+## Created: April, 15, 2014
+
 library(shiny)
 
 shinyUI(pageWithSidebar(
@@ -16,7 +21,7 @@ shinyUI(pageWithSidebar(
       )
     ),
     
-
+    
     conditionalPanel(condition = ("input.addtest2 == true"),
                      wellPanel(
                        checkboxInput(inputId="addtest3", label="Enter Values for Third Test",TRUE),
@@ -26,7 +31,7 @@ shinyUI(pageWithSidebar(
                        )
                      )
     ),
-
+    
     conditionalPanel(condition = ("input.addtest2 == true & input.addtest3 == true"),
                      wellPanel(
                        checkboxInput(inputId="addtest4", label="Enter Values for Fourth Test",TRUE),
@@ -47,9 +52,9 @@ shinyUI(pageWithSidebar(
       checkboxInput(inputId="under", label="Modify Plot Attributes",FALSE),
       conditionalPanel(condition="input.under == true", 
                        wellPanel(
-                       textInput("title", "Plot Title", value="Enter Title Here"), 
-                       textInput("xtitle", "Plot Title", value="Enter X-axis Title Here"), 
-                       textInput("ytitle", "Plot Title", value="Enter Y-axis Title Here")),
+                         textInput("title", "Plot Title", value="Enter Title Here"), 
+                         textInput("xtitle", "Plot Title", value="Enter X-axis Title Here"), 
+                         textInput("ytitle", "Plot Title", value="Enter Y-axis Title Here")),
                        wellPanel(
                          textInput("test1name", "Name for first test:", value="Test 1"),
                          conditionalPanel(condition = "input.addtest2==true",
@@ -64,21 +69,24 @@ shinyUI(pageWithSidebar(
                        ),
                        
                        wellPanel(
-                       sliderInput("titlesize", "Text Size for Plot Title:",
-                                   min=1, max=3, value=2, step=0.1),
-                       br(),
-                       sliderInput("axeslabels", "Text Size for Axes Labels:",
-                                   min=1, max=2, value=1.2, step=0.1),
-                       br(),
-                       sliderInput("axessize", "Size for Axes Marks:",
-                                   min=1, max=2, value=1.2, step=0.1),
-                       br(),
-                       sliderInput("linewidth", "Thickness of Lines",
-                                   min=1, max=4, value=2.2, step=0.1),
-                       br(),
-                       sliderInput("legtext", "Legend Text Size",
-                                   min=0.5, max=2, value=1.2, step=0.1)
-      ))
+                         sliderInput("titlesize", "Text Size for Plot Title:",
+                                     min=1, max=3, value=2, step=0.1),
+                         br(),
+                         sliderInput("axeslabels", "Text Size for Axes Labels:",
+                                     min=1, max=2, value=1.2, step=0.1),
+                         br(),
+                         sliderInput("axessize", "Size for Axes Marks:",
+                                     min=1, max=2, value=1.2, step=0.1),
+                         br(),
+                         sliderInput("linewidth", "Thickness of Lines",
+                                     min=1, max=4, value=2.2, step=0.1),
+                         br(),
+                         sliderInput("legtext", "Legend Text Size",
+                                     min=0.5, max=2, value=1.2, step=0.1)
+                       ),
+                       wellPanel(
+                         checkboxInput("grid", "Toggle Grid Lines", value=TRUE))
+      )
     ),
     
     wellPanel(
@@ -106,7 +114,7 @@ shinyUI(pageWithSidebar(
                br(),
                br(),
                div(h4("More resources:")),
-                   HTML('<ol>
+               HTML('<ol>
 <li><a href=\"http://spark.rstudio.com/statstudio/MTBF/\" target=\"_blank\">MTBF calculator with confidence intervals</a> </li>
 <li><a href=\"http://spark.rstudio.com/statstudio/MTBFTestTime/\" target=\"_blank\">MTBF test time calculator</a> </li>
                         </ol>')

@@ -63,7 +63,7 @@ shinyServer(function(input, output){
     for (i in 1:length(nfails)){
       probs[[i]] <- pbinom(nfails[i], nshots[i], proportions)
     }
-        
+    
     df <- data.frame(Proportions = proportions, Prob1 = probs[[1]])
     if(addtest2){
       df$Prob2 <- probs[[2]]
@@ -82,7 +82,10 @@ shinyServer(function(input, output){
   
   makePlot <- function(){
     df <- data() 
-    
+    grid <- TRUE
+    if(input$under){
+      grid <- input$grid
+    }
     if(input$under){
       axessize  <- input$axessize
       linewidth <- input$linewidth
@@ -106,13 +109,15 @@ shinyServer(function(input, output){
       xmax <- max(df$Proportions)
     }
     ## the xaxs="i", yaxs="i" options enforce the axes limits
-    plot(df$Proportions, df$Prob1, 'l', col="blue", lwd=linewidth,
-         xlim=c(xmin, xmax), ylim=c(0,1), 
-         xlab=NA, ylab=NA, cex.axis=axessize,
-         xaxs="i")
-    grid(lwd=2)
-    
-    par(new=TRUE)
+    if(grid){
+      plot(df$Proportions, df$Prob1, 'l', col="blue", lwd=linewidth,
+           xlim=c(xmin, xmax), ylim=c(0,1), 
+           xlab=NA, ylab=NA, cex.axis=axessize,
+           xaxs="i")
+      grid(lwd=2)
+      
+      par(new=TRUE)
+    }
     plot(df$Proportions, df$Prob1, 'l', col="blue", lwd=linewidth,
          xlim=c(xmin, xmax), ylim=c(0,1), 
          xlab=NA, ylab=NA, cex.axis=axessize,
