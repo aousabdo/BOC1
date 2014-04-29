@@ -1,3 +1,8 @@
+## Binomail Operating Characterstic Curves app
+## Author: Dr. Aous Abdo <aabdo.und@ida.org>
+## Company: Institute for Defense Analyses
+## Created: April, 15, 2014
+
 library(shiny)
 library(ggplot2)
 library(plyr)
@@ -11,34 +16,40 @@ shinyServer(function(input, output){
   # Reactive data frame to store data
   data <- reactive({
     proportions <- seq(0.001, 0.2, 0.001)
+    
+    ## Read input from ui.R file
     nfails      <- c(input$fails1)
     nshots      <- c(input$shots1)
+    addtest2    <- input$addtest2
+    addtest3    <- input$addtest3
+    addtest4    <- input$addtest4
+    adjustX     <- input$adjustX
     
-    if(input$addtest2){
+    if(addtest2){
       nfails[2] <- input$fails2
       nshots[2] <- input$shots2
-      if(input$addtest3){
+      if(addtest3){
         nfails[3] <- input$fails3
         nshots[3] <- input$shots3  
-        if(input$addtest4){
+        if(addtest4){
           nfails[4] <- input$fails4
           nshots[4] <- input$shots4
         }
       }
     }
     
-    if(input$adjustX){
+    if(adjustX){
       PropMin <- input$xmin
       PropMax <- input$xmax
     }
     else{
       PropMin <- 0
       PropMax <- MaxX(nfails[1], nshots[1], max=0.001)
-      if(input$addtest2){
+      if(addtest2){
         PropMax  <- max(PropMax, MaxX(nfails[2], nshots[2], max=0.001))
-        if(input$addtest3){
+        if(addtest3){
           PropMax  <- max(PropMax, MaxX(nfails[3], nshots[3], max=0.001))
-          if(input$addtest4){
+          if(addtest4){
             PropMax  <- max(PropMax, MaxX(nfails[4], nshots[4], max=0.001))
           }
         }
@@ -53,11 +64,11 @@ shinyServer(function(input, output){
     }
     
     df <- data.frame(Proportions = proportions, Prob1 = probs[[1]])
-    if(input$addtest2){
+    if(addtest2){
       df$Prob2 <- probs[[2]]
-      if(input$addtest3){
+      if(addtest3){
         df$Prob3 <- probs[[3]]
-        if(input$addtest4){
+        if(addtest4){
           df$Prob4 <- probs[[4]]
         }
       }
@@ -205,20 +216,20 @@ shinyServer(function(input, output){
     }
   )
   origdataframe <- reactive({
-    df <- data()$df
-    # Function to do the dcast
-    dcastfun <- "MTBF + Test1 ~ Vert"
-    # Add Test 2 and Test 3 to the function if corresponding tests are selected
-    if(input$addtest2){
-      dcastfun <- "MTBF + Test1 + Test2 ~ Vert"
-      if(input$addtest3){dcastfun <- "MTBF + Test1 + Test2 + Test3 ~ Vert"}
-    } 
+    df <- data()
+    #     # Function to do the dcast
+    #     dcastfun <- "MTBF + Test1 ~ Vert"
+    #     # Add Test 2 and Test 3 to the function if corresponding tests are selected
+    #     if(input$addtest2){
+    #       dcastfun <- "MTBF + Test1 + Test2 ~ Vert"
+    #       if(input$addtest3){dcastfun <- "MTBF + Test1 + Test2 + Test3 ~ Vert"}
+    #     } 
+    #     
+    #     # Dcast one variable at a time
+    #     df <- dcast(df, MTBF + Vert + vert ~ Test , value.var="Prob")
+    #     df <- dcast(df, dcastfun, value.var="vert")
     
-    # Dcast one variable at a time
-    df <- dcast(df, MTBF + Vert + vert ~ Test , value.var="Prob")
-    df <- dcast(df, dcastfun, value.var="vert")
-    
-    df$vert1 <- NULL
+    #     df$vert1 <- NULL
     
     if(input$under){
       test1name <- input$test1name
@@ -226,6 +237,9 @@ shinyServer(function(input, output){
         test2name <- input$test2name
         if(input$addtest3){
           test3name <- input$test3name
+          if(input$addtest4){
+            test3name <- input$test4name          
+          }
         }
       }
     }
@@ -235,23 +249,29 @@ shinyServer(function(input, output){
         test2name <- "Test 2"
         if(input$addtest3){
           test3name <- "Test 3"
+          if(input$addtest4){
+            test4name <- "Test 4"          
+          }
         }
       }
     }
-    
     #Rename column names
-    names(df)[1] <- "MTBF (Hours)"
+    names(df)[1] <- "Proportion Defective"
     names(df)[2] <- sprintf("%s Prob.",test1name)
     
     #Rename the optional columns only if they exist
     if(length(colnames(df)>2)){
-      if ("Test2" %in% colnames(df)){
-        colnames(df)[colnames(df)=="Test2"] <- sprintf("%s Prob.",test2name)
-        df$vert2 <- NULL
+      if ("Prob2" %in% colnames(df)){
+        colnames(df)[colnames(df)=="Prob2"] <- sprintf("%s Prob.",test2name)
+        #         df$vert2 <- NULL
       }
-      if ("Test3" %in% colnames(df)){
-        colnames(df)[colnames(df)=="Test3"] <- sprintf("%s Prob.",test3name)
-        df$vert3 <- NULL
+      if ("Prob3" %in% colnames(df)){
+        colnames(df)[colnames(df)=="Prob3"] <- sprintf("%s Prob.",test3name)
+        #         df$vert3 <- NULL
+        if ("Prob4" %in% colnames(df)){
+          colnames(df)[colnames(df)=="Prob4"] <- sprintf("%s Prob.",test4name)
+          #         df$vert4 <- NULL
+        }
       }
     }
     print(df, row.names=FALSE)
@@ -326,7 +346,7 @@ shinyServer(function(input, output){
   })
   
   output$downloadData <- downloadHandler(
-    filename = function() { paste('OC_Curves.csv', sep='') },
+    filename = function() { paste('BOC_Curves.csv', sep='') },
     content = function(file) {
       write.csv(origdataframe(), file)
     }
