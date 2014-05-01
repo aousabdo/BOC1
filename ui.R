@@ -4,6 +4,7 @@
 ## Created: April, 15, 2014
 
 library(shiny)
+library(markdown)
 
 shinyUI(pageWithSidebar(
   headerPanel("Binomial Operating Characteristic Curves"),
@@ -53,8 +54,8 @@ shinyUI(pageWithSidebar(
       conditionalPanel(condition="input.under == true", 
                        wellPanel(
                          textInput("title", "Plot Title", value="Enter Title Here"), 
-                         textInput("xtitle", "Plot Title", value="Enter X-axis Title Here"), 
-                         textInput("ytitle", "Plot Title", value="Enter Y-axis Title Here")),
+                         textInput("xtitle", "X-axis Title", value="Enter X-axis Title Here"), 
+                         textInput("ytitle", "Y-axis Title", value="Enter Y-axis Title Here")),
                        wellPanel(
                          textInput("test1name", "Name for first test:", value="Test 1"),
                          conditionalPanel(condition = "input.addtest2==true",
@@ -104,22 +105,22 @@ shinyUI(pageWithSidebar(
                                                 </div>                            
                     </div>')
       ),
-      tabPanel("Results Summary",
-               br(),
-               br(),
-               div(textOutput("Text1"), style = "font-family: 'times'; font-size:16pt; color:black"),
-               br(),
-               br(),
-               tableOutput("table"),
-               br(),
-               br(),
-               div(h4("More resources:")),
-               HTML('<ol>
-<li><a href=\"http://spark.rstudio.com/statstudio/MTBF/\" target=\"_blank\">MTBF calculator with confidence intervals</a> </li>
-<li><a href=\"http://spark.rstudio.com/statstudio/MTBFTestTime/\" target=\"_blank\">MTBF test time calculator</a> </li>
-                        </ol>')
-      ),
-      tabPanel("About"),
+#       tabPanel("Results Summary",
+#                br(),
+#                br(),
+#                div(textOutput("Text1"), style = "font-family: 'times'; font-size:16pt; color:black"),
+#                br(),
+#                br(),
+#                tableOutput("table"),
+#                br(),
+#                br(),
+#                div(h4("More resources:")),
+#                HTML('<ol>
+# <li><a href=\"http://spark.rstudio.com/statstudio/MTBF/\" target=\"_blank\">MTBF calculator with confidence intervals</a> </li>
+# <li><a href=\"http://spark.rstudio.com/statstudio/MTBFTestTime/\" target=\"_blank\">MTBF test time calculator</a> </li>
+#                         </ol>')
+#       ),
+      tabPanel("About", includeMarkdown("About.md")),
       tabPanel("Data Table", tableOutput("MTBFtable"))
     ))
 ))
