@@ -37,7 +37,7 @@ More Resources:
 
 $$
 \begin{aligned}
-\dot{x} & = \sigma(y-x) \\ 
+\dot{x} & = \sigma(y-x) \\
 \int x \, dx& = \frac{x^2}{2} + C
 \end{aligned}
 $$

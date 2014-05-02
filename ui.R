@@ -105,22 +105,22 @@ shinyUI(pageWithSidebar(
                                                 </div>                            
                     </div>')
       ),
-#       tabPanel("Results Summary",
-#                br(),
-#                br(),
-#                div(textOutput("Text1"), style = "font-family: 'times'; font-size:16pt; color:black"),
-#                br(),
-#                br(),
-#                tableOutput("table"),
-#                br(),
-#                br(),
-#                div(h4("More resources:")),
-#                HTML('<ol>
-# <li><a href=\"http://spark.rstudio.com/statstudio/MTBF/\" target=\"_blank\">MTBF calculator with confidence intervals</a> </li>
-# <li><a href=\"http://spark.rstudio.com/statstudio/MTBFTestTime/\" target=\"_blank\">MTBF test time calculator</a> </li>
-#                         </ol>')
-#       ),
-      tabPanel("About", includeMarkdown("About.md")),
+      #       tabPanel("Results Summary",
+      #                br(),
+      #                br(),
+      #                div(textOutput("Text1"), style = "font-family: 'times'; font-size:16pt; color:black"),
+      #                br(),
+      #                br(),
+      #                tableOutput("table"),
+      #                br(),
+      #                br(),
+      #                div(h4("More resources:")),
+      #                HTML('<ol>
+      # <li><a href=\"http://spark.rstudio.com/statstudio/MTBF/\" target=\"_blank\">MTBF calculator with confidence intervals</a> </li>
+      # <li><a href=\"http://spark.rstudio.com/statstudio/MTBFTestTime/\" target=\"_blank\">MTBF test time calculator</a> </li>
+      #                         </ol>')
+      #       ),
+      tabPanel("About", includeHTML("./About.html")),
       tabPanel("Data Table", tableOutput("MTBFtable"))
     ))
 ))
